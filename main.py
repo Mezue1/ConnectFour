@@ -160,7 +160,10 @@ class Game:
         print(f"{winner.getName()} won the game")
 
 
-
+#Formats the Grid
 grid = Grid(6, 7)
+
+#Picks connect number and number of rounds to win
 game = Game(grid, 4, 2)
+#begins the game
 game.play()
