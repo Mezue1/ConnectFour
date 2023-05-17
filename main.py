@@ -1,35 +1,30 @@
 import enum
 
-# Updates the position of each player on the grid (initial value is 0)
 class GridPosition(enum.Enum):
     EMPTY = 0
     YELLOW = 1
     RED = 2
 
+
 class Grid:
-    #sets default grid to 6x7, but allows grid to be chaned
-    def __init__(self,rows=6,cols=7):
+    def __init__(self, rows, columns):
         self._rows = rows
-        self._cols = cols
+        self._columns = columns
         self._grid = None
         self.initGrid()
 
     def initGrid(self):
-        #initialises empty grid
-        self._grid = [[GridPosition.EMPTY for _ in range(self._cols)] for _ in range(self._rows)]
+        self._grid = [[GridPosition.EMPTY for _ in range(self._columns)] for _ in range(self._rows)]
 
     def getGrid(self):
-        #Calls the grid. To be used later when printing the grid to the players
         return self._grid
 
     def getColumnCount(self):
-        return self._cols
+        return self._columns
 
     def placePiece(self, column, piece):
-        #Ensures piece is within the allowed columns
-        if column < 0 or column >= self._cols:
+        if column < 0 or column >= self._columns:
             raise ValueError('Invalid column')
-        #Ensure piece is not empty
         if piece == GridPosition.EMPTY:
             raise ValueError('Invalid piece')
         for row in range(self._rows-1, -1, -1):
@@ -40,7 +35,7 @@ class Grid:
     def checkWin(self, connectN, row, col, piece):
         count = 0
         # Check horizontal
-        for c in range(self._cols):
+        for c in range(self._columns):
             if self._grid[row][c] == piece:
                 count += 1
             else:
@@ -62,7 +57,7 @@ class Grid:
         count = 0
         for r in range(self._rows):
             c = row + col - r
-            if c >= 0 and c < self._cols and self._grid[r][c] == piece:
+            if c >= 0 and c < self._columns and self._grid[r][c] == piece:
                 count += 1
             else:
                 count = 0
@@ -73,7 +68,7 @@ class Grid:
         count = 0
         for r in range(self._rows):
             c = col - row + r
-            if c >= 0 and c < self._cols and self._grid[r][c] == piece:
+            if c >= 0 and c < self._columns and self._grid[r][c] == piece:
                 count += 1
             else:
                 count = 0
@@ -93,6 +88,7 @@ class Player:
 
     def getPieceColor(self):
         return self._pieceColor
+
 
 class Game:
     def __init__(self, grid, connectN, rounds):
@@ -116,13 +112,14 @@ class Game:
             row = ''
             for piece in grid[i]:
                 if piece == GridPosition.EMPTY:
-                    row += '0 '
+                    row += '   X   '
                 elif piece == GridPosition.YELLOW:
-                    row += 'Y '
+                    row += '  🟡   '
                 elif piece == GridPosition.RED:
-                    row += 'R '
+                    row += '  🔴   '
             print(row)
         print('')
+        
 
     def playMove(self, player):
         self.printBoard()
@@ -143,16 +140,18 @@ class Game:
 
     def play(self):
         maxScore = 0
+        roundNum = 0
         winner = None
         while maxScore < self._rounds:
+            roundNum +=1
             winner = self.playRound()
-            print(f"{winner.getName()} won the round")
+            print(f"\n\n{winner.getName()} won round {roundNum}!!!!!")
             maxScore = max(self._score[winner.getName()], maxScore)
 
             self._grid.initGrid() # reset grid
         print(f"{winner.getName()} won the game")
 
 
-grid = Grid(10, 10)
+grid = Grid(6, 7)
 game = Game(grid, 4, 2)
 game.play()
