@@ -1,5 +1,6 @@
 import enum
 
+# Updates the position of each player on the grid (initial value is 0)
 class GridPosition(enum.Enum):
     EMPTY = 0
     YELLOW = 1
@@ -7,16 +8,19 @@ class GridPosition(enum.Enum):
 
 
 class Grid:
-    def __init__(self, rows, columns):
+    #sets default grid to 6x7, but allows grid to be changed
+    def __init__(self, rows =6, columns=7):
         self._rows = rows
         self._columns = columns
         self._grid = None
         self.initGrid()
 
     def initGrid(self):
+        #initialises the empty grid
         self._grid = [[GridPosition.EMPTY for _ in range(self._columns)] for _ in range(self._rows)]
 
     def getGrid(self):
+        #used when printing the grid
         return self._grid
 
     def getColumnCount(self):
@@ -91,14 +95,18 @@ class Player:
 
 
 class Game:
-    def __init__(self, grid, connectN, rounds):
+    #initialises game settings to 3 rounds of connect 4
+    def __init__(self, grid, connectN=4, rounds=3):
         self._grid = grid
         self._connectN = connectN
         self._rounds = rounds
 
+        p1 = str(input("Player 1, what is your name? "))
+        p2 = str(input("Player 2, what is your name? "))
+
         self._players = [
-            Player('Player 1', GridPosition.YELLOW),
-            Player('Player 2', GridPosition.RED)
+            Player(p1, GridPosition.YELLOW),
+            Player(p2, GridPosition.RED)
         ]
 
         self._score = {}
@@ -150,6 +158,7 @@ class Game:
 
             self._grid.initGrid() # reset grid
         print(f"{winner.getName()} won the game")
+
 
 
 grid = Grid(6, 7)
